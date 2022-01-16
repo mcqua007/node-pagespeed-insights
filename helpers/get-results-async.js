@@ -42,9 +42,9 @@ async function getMetrics(config) {
         promises.push(getAndJoinData(url, page, index, pathToResults, folder));
       }
     }
-
-    return Promise.all(promises);
   }
+
+  return Promise.all(promises);
 }
 async function getAndWriteResultsAsync(config) {
   getMetrics(config).then((results) => {
