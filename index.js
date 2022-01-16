@@ -3,7 +3,7 @@
 // import dotenv from 'dotenv';
 
 const getResults = require('./helpers/get-results.js');
-const ggetAndWriteResultsAsync = require('./helpers/get-results-async');
+const getAndWriteResultsAsync = require('./helpers/get-results-async');
 const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
