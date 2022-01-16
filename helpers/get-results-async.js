@@ -9,7 +9,7 @@ const f = require('fs');
 const path = require('path');
 var Spinner = require('cli-spinner').Spinner;
 
-async function getAndJoinData(url, page, index, pathToResults, folder) {
+async function getAndJoinData(url, page, index, pathToResults, host, folder) {
   const result = await axios.get(
     `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=${process.env.KEY}&url=${url}`
   );
@@ -35,11 +35,7 @@ async function getMetrics(config) {
         let p = page === 'home' ? '' : page;
         const url = `https://${host}/${p}`;
 
-        // const spinner = new Spinner(`%s ${i}. Fetching results for ${url}`);
-        // spinner.setSpinnerString(20);
-        // spinner.start();
-
-        promises.push(getAndJoinData(url, page, index, pathToResults, folder));
+        promises.push(getAndJoinData(url, page, index, pathToResults, host, folder));
       }
     }
   }
@@ -47,20 +43,23 @@ async function getMetrics(config) {
   return Promise.all(promises);
 }
 async function getAndWriteResultsAsync(config) {
+  const spinner = new Spinner(`%s Fetching results...`);
+  spinner.setSpinnerString(20);
+  spinner.start();
+
   getMetrics(config).then((results) => {
-    console.log('Res: ', results);
+    console.log({ results });
 
     results.forEach((item) => {
       var { data, folder, index, fullPath, fileName } = item;
 
       fs.writeFile(fullPath, JSON.stringify(data)).then((e) => {
         if (e) throw e;
-        //spinner.stop(true);
+        spinner.stop(true);
         console.log(`- Results written to ${folder}/${fileName}${index}.json`);
       });
     });
   });
 }
 
-// export { getResults };
 module.exports = getAndWriteResultsAsync;
