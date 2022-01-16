@@ -42,6 +42,7 @@ async function getMetrics(config) {
 
   return Promise.all(promises);
 }
+
 async function getAndWriteResultsAsync(config) {
   const spinner = new Spinner(`%s Fetching results...`);
   spinner.setSpinnerString(20);
@@ -51,12 +52,12 @@ async function getAndWriteResultsAsync(config) {
     console.log({ results });
 
     results.forEach((item) => {
-      var { data, folder, index, fullPath, fileName } = item;
+      var { data, folder, index, fullPath, fileName, host } = item;
 
       fs.writeFile(fullPath, JSON.stringify(data)).then((e) => {
         if (e) throw e;
         spinner.stop(true);
-        console.log(`- Results written to ${folder}/${fileName}${index}.json`);
+        console.log(`- Results written to ${folder}/${host}/${fileName}${index}.json`);
       });
     });
   });

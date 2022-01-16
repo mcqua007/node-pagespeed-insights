@@ -47,7 +47,7 @@ async function getResults(config) {
         await fs.writeFile(fullPath, JSON.stringify(result.data)).then((e) => {
           if (e) throw e;
           spinner.stop(true);
-          console.log(`- (${i}) Results written to ${folder}/${fileName}${index}.json`);
+          console.log(`- (${i}) Results written to ${folder}/${host}/${fileName}${index}.json`);
         });
       }
     }
