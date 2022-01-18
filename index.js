@@ -1,11 +1,8 @@
-// import { getResults } from './helpers/get-results.js';
-// import fs from 'fs';
-// import dotenv from 'dotenv';
+import getResults from './helpers/get-results.js';
+import getAndWriteResultsAsync from './helpers/get-results-async.js';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
-const getResults = require('./helpers/get-results.js');
-const getAndWriteResultsAsync = require('./helpers/get-results-async');
-const fs = require('fs');
-const dotenv = require('dotenv');
 dotenv.config();
 
 const hosts = ['fromourplace.com', 'fromourplace.ca', 'fromourplace.co.uk'];
