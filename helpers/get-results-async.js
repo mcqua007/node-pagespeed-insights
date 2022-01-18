@@ -1,13 +1,10 @@
-// import axios from 'axios';
-// import * as fs from 'fs/promises';
-// import path from 'path';
-// import Spinner from 'cli-spinner';
+import axios from 'axios';
+import * as fs from 'fs';
+import path from 'path';
+import { Spinner } from 'cli-spinner';
+import { fileURLToPath } from 'url';
 
-const axios = require('axios');
-const fs = require('fs/promises');
-const f = require('fs');
-const path = require('path');
-var Spinner = require('cli-spinner').Spinner;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function getAndJoinData(url, page, index, pathToResults, host, folder) {
   const result = await axios.get(
@@ -24,12 +21,12 @@ async function getMetrics(config) {
   const { folder, hosts, pages, runs } = config;
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
 
-  for (host of hosts) {
-    if (!f.existsSync(pathToResults + '/' + hosts)) {
-      f.mkdirSync(pathToResults + '/' + host);
+  for (const host of hosts) {
+    if (!fs.existsSync(pathToResults + '/' + host)) {
+      fs.mkdirSync(pathToResults + '/' + host);
     }
 
-    for (page of pages) {
+    for (const page of pages) {
       for (var i = 1; i <= runs; i++) {
         var index = runs === 1 ? '' : '-' + i;
         let p = page === 'home' ? '' : page;
@@ -54,7 +51,7 @@ async function getAndWriteResultsAsync(config) {
     results.forEach((item) => {
       var { data, folder, index, fullPath, fileName, host } = item;
 
-      fs.writeFile(fullPath, JSON.stringify(data)).then((e) => {
+      fs.promises.writeFile(fullPath, JSON.stringify(data)).then((e) => {
         if (e) throw e;
         spinner.stop(true);
         console.log(`- Results written to ${folder}/${host}/${fileName}${index}.json`);
@@ -63,4 +60,4 @@ async function getAndWriteResultsAsync(config) {
   });
 }
 
-module.exports = getAndWriteResultsAsync;
+export default getAndWriteResultsAsync;
