@@ -13,10 +13,10 @@ async function getAndJoinData(url, page, index, pathToResults, host, folder) {
 
   const fileName = page.replace(RegExp('/', 'g'), '-');
   const fullPath = `${pathToResults}/${host}/${fileName}${index}.json`;
-  return { fileName, fullPath, folder, index, data: result.data };
+  return { fileName, fullPath, folder, host, index, data: result.data };
 }
 
-async function getMetrics(config) {
+async function getAllPagesMetrics(config) {
   var promises = [];
   const { folder, hosts, pages, runs } = config;
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
@@ -45,9 +45,7 @@ async function getAndWriteResultsAsync(config) {
   spinner.setSpinnerString(20);
   spinner.start();
 
-  getMetrics(config).then((results) => {
-    console.log({ results });
-
+  getAllPagesMetrics(config).then((results) => {
     results.forEach((item) => {
       var { data, folder, index, fullPath, fileName, host } = item;
 
