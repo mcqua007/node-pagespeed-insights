@@ -10,7 +10,6 @@ async function getAndWriteResults(config) {
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
 
   let results = [];
-  var promises = [];
 
   for (const host of hosts) {
     if (!fs.existsSync(pathToResults + '/' + host)) {
