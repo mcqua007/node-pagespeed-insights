@@ -4,8 +4,6 @@ import path from 'path';
 import { Spinner } from 'cli-spinner';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 async function getAndJoinData(url, page, index, pathToResults, host, folder) {
   const result = await axios.get(
     `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=${process.env.KEY}&url=${url}`
@@ -19,6 +17,7 @@ async function getAndJoinData(url, page, index, pathToResults, host, folder) {
 async function getAllPagesMetrics(config) {
   var promises = [];
   const { folder, hosts, pages, runs } = config;
+  const __dirname = config.dir ? config.dir : path.dirname(fileURLToPath(import.meta.url));
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
 
   for (const host of hosts) {

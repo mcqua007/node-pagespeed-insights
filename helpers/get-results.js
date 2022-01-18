@@ -4,10 +4,9 @@ import path from 'path';
 import { Spinner } from 'cli-spinner';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-async function getResults(config) {
+async function getAndWriteResults(config) {
   const { folder, hosts, pages, runs } = config;
+  const __dirname = config.dir ? config.dir : path.dirname(fileURLToPath(import.meta.url));
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
 
   let results = [];
@@ -49,4 +48,4 @@ async function getResults(config) {
   return results;
 }
 
-export default getResults;
+export default getAndWriteResults;
