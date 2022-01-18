@@ -1,41 +1,22 @@
-import getResults from './helpers/get-results.js';
+import getAndWriteResults from './helpers/get-results.js';
 import getAndWriteResultsAsync from './helpers/get-results-async.js';
 import fs from 'fs';
 import dotenv from 'dotenv';
+import config from './config.js';
 
 dotenv.config();
 
-const hosts = ['fromourplace.com', 'fromourplace.ca', 'fromourplace.co.uk'];
-const pages = [
-  'home',
-  'collections/all',
-  'products/always-essential-cooking-pan',
-  'products/perfect-pot',
-  'products/home-cook-duo',
-];
-
-// const hosts = ['fromourplace.com'];
-// const pages = ['home', 'collections/all'];
-
-const folder = 'results-' + new Date().toISOString().slice(0, 16);
+const folder = config.folder ? config.folder : `results-${new Date().toISOString().slice(0, 16)}`;
+config.folder = folder;
 
 if (!fs.existsSync(folder)) {
   fs.mkdirSync(folder);
 }
 
-var sync = false;
+console.log(`${config.hosts.length * config.pages.length} pages to test. With ${config.runs} run(s) per page.`);
 
-const config = {
-  folder,
-  hosts,
-  pages,
-  runs: 1,
-};
-
-console.log(`${hosts.length * pages.length} pages to test. With ${config.runs} run(s) per page.`);
-
-if (sync) {
-  getResults(config);
+if (config.sync) {
+  getAndWriteResults(config);
 } else {
   getAndWriteResultsAsync(config);
 }
