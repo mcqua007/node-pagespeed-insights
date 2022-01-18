@@ -6,8 +6,11 @@ import config from './config.js';
 
 dotenv.config();
 
-const folder = config.folder ? config.folder : `results-${new Date().toISOString().slice(0, 16)}`;
+//Set defaults incase not defined
+let folder = config.folder ? config.folder : `results-${new Date().toISOString().slice(0, 16)}`;
+let devices = config.devices ? config.devices : `['desktop']`;
 config.folder = folder;
+config.devices = devices;
 
 if (!fs.existsSync(folder)) {
   fs.mkdirSync(folder);

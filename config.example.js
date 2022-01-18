@@ -6,6 +6,7 @@
  *  runs: integer the number of times to run each page i.e. 3 get 3 results for /products/pencil page
  *  sync: (optional) boolean that runs either synchronously or asynchronous defaults to async as its faster
  *  dir: (optional) string of path to putput folder, defaults to root of this project
+ *  devices (optional) array of strings runs either desktop or mobile or both defaults to deskto
  */
 
 const config = {
@@ -13,4 +14,5 @@ const config = {
   pages: ['home', 'posts/all', 'about', 'products/pencil'],
   runs: 1,
   sync: false,
+  devices: ['desktop', 'mobile'],
 };
