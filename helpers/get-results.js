@@ -20,7 +20,7 @@ async function getAndWriteResults(config) {
       for (var i = 1; i <= runs; i++) {
         var index = runs === 1 ? '' : '-' + i;
         let p = page === 'home' ? '' : page;
-        const url = `https://${host}/${p}`;
+        const url = `https://${host}/${p}?v=${Date.now()}`;
 
         const spinner = Spinner(`%s ${i}. Fetching results for ${url}`);
         spinner.setSpinnerString(20);

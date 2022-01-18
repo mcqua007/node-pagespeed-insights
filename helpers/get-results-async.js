@@ -11,7 +11,7 @@ async function getAndJoinData(url, page, index, pathToResults, host, folder) {
 
   const fileName = page.replace(RegExp('/', 'g'), '-');
   const fullPath = `${pathToResults}/${host}/${fileName}${index}.json`;
-  return { fileName, fullPath, folder, host, index, data: result.data };
+  return { fileName, fullPath, folder, host, index, data: result.data.lighthouseResult.fetchTime };
 }
 
 async function getAllPagesMetrics(config) {
@@ -29,7 +29,7 @@ async function getAllPagesMetrics(config) {
       for (var i = 1; i <= runs; i++) {
         var index = runs === 1 ? '' : '-' + i;
         let p = page === 'home' ? '' : page;
-        const url = `https://${host}/${p}`;
+        const url = `https://${host}/${p}?v=${Date.now()}`;
 
         promises.push(getAndJoinData(url, page, index, pathToResults, host, folder));
       }
@@ -45,6 +45,8 @@ async function getAndWriteResultsAsync(config) {
   spinner.start();
 
   getAllPagesMetrics(config).then((results) => {
+    console.log('results: ', results);
+
     results.forEach((item) => {
       var { data, folder, index, fullPath, fileName, host } = item;
 
