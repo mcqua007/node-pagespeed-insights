@@ -41,7 +41,7 @@ async function getAllPagesMetrics(config) {
 
 async function getAndWriteResultsAsync(config) {
   const spinner = new Spinner(`%s Fetching results...`);
-  spinner.setSpinnerString(20);
+  spinner.setSpinnerString(30);
   spinner.start();
 
   getAllPagesMetrics(config).then((results) => {
