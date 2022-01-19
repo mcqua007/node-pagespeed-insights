@@ -38,7 +38,7 @@ async function getAllPagesMetrics(config) {
         for (var i = 1; i <= runs; i++) {
           var index = runs === 1 ? '' : '-' + i;
           let p = page === 'home' ? '' : page;
-          const url = `https://${host}/${p}?v=${Date.now()}&run=${i}`;
+          const url = `https://${host}/${p}?v=${Date.now()}-${i}`;
 
           promises.push(getAndJoinData(url, page, index, pathToResults, host, folder, device));
         }
