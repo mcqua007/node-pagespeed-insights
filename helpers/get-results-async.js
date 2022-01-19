@@ -4,19 +4,27 @@ import path from 'path';
 import { Spinner } from 'cli-spinner';
 import { fileURLToPath } from 'url';
 
-async function getAndJoinData(url, page, index, pathToResults, host, folder) {
+async function getAndJoinData(url, page, index, pathToResults, host, folder, device) {
   const result = await axios.get(
-    `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=${process.env.KEY}&url=${url}`
+    `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?key=${process.env.KEY}&strategy=${device}&url=${url}`
   );
 
-  const fileName = page.replace(RegExp('/', 'g'), '-');
+  const fileName = `${device}-${page.replace(RegExp('/', 'g'), '-')}`;
   const fullPath = `${pathToResults}/${host}/${fileName}${index}.json`;
-  return { fileName, fullPath, folder, host, index, data: result.data.lighthouseResult.fetchTime };
+  return {
+    fileName,
+    fullPath,
+    folder,
+    host,
+    index,
+    data: result.data,
+    fetchTime: result.data.lighthouseResult.fetchTime,
+  };
 }
 
 async function getAllPagesMetrics(config) {
   var promises = [];
-  const { folder, hosts, pages, runs } = config;
+  const { folder, hosts, pages, runs, devices } = config;
   const __dirname = config.dir ? config.dir : path.dirname(fileURLToPath(import.meta.url));
   const pathToResults = config.outputDir ? config.outputDir : `${path.join(__dirname, '../')}/${folder}`;
 
@@ -26,12 +34,14 @@ async function getAllPagesMetrics(config) {
     }
 
     for (const page of pages) {
-      for (var i = 1; i <= runs; i++) {
-        var index = runs === 1 ? '' : '-' + i;
-        let p = page === 'home' ? '' : page;
-        const url = `https://${host}/${p}?v=${Date.now()}`;
+      for (const device of devices) {
+        for (var i = 1; i <= runs; i++) {
+          var index = runs === 1 ? '' : '-' + i;
+          let p = page === 'home' ? '' : page;
+          const url = `https://${host}/${p}?v=${Date.now()}&run=${i}`;
 
-        promises.push(getAndJoinData(url, page, index, pathToResults, host, folder));
+          promises.push(getAndJoinData(url, page, index, pathToResults, host, folder, device));
+        }
       }
     }
   }
