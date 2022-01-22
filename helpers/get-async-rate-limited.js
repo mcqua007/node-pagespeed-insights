@@ -70,6 +70,7 @@ async function getAndWriteResultsAsyncRateLimited(config) {
   rateLimitMap(requestsData, 100, 20, getAndJoinData).then(
     (results) => {
       writeResultsToFiles(results, spinner);
+      return results;
     },
     (err) => {
       console.log(('Error: ', err));
