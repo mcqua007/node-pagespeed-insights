@@ -17,7 +17,11 @@ if (!fs.existsSync(folder)) {
   fs.mkdirSync(folder);
 }
 
-console.log(`${config.hosts.length * config.pages.length} pages to test. With ${config.runs} run(s) per page.`);
+console.log(
+  `${config.hosts.length * config.pages.length} pages to test. With ${config.runs} run(s) per page and ${
+    config.devices.length
+  } device(s)`
+);
 
 if (config.sync) {
   getAndWriteResults(config);
