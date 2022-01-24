@@ -7,6 +7,7 @@
 //        function returns a promise that is resolved/rejected when async operation is done
 // Returns: promise that is resolved with an array of resolves values
 //          or rejected with first error that occurs
+
 function rateLimitMap(array, requestsPerSec, maxInFlight, fn) {
   return new Promise(function(resolve, reject) {
     var index = 0;
@@ -14,7 +15,6 @@ function rateLimitMap(array, requestsPerSec, maxInFlight, fn) {
     var doneCntr = 0;
     var launchTimes = [];
     var results = new Array(array.length);
-
     // calculate num requests in last second
     function calcRequestsInLastSecond() {
       var now = Date.now();
@@ -31,7 +31,6 @@ function rateLimitMap(array, requestsPerSec, maxInFlight, fn) {
     }
 
     function runMore() {
-      console.log('Batch of Urls: ');
       while (index < array.length && inFlightCntr < maxInFlight && calcRequestsInLastSecond() < requestsPerSec) {
         (function(i) {
           ++inFlightCntr;
