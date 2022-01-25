@@ -9,12 +9,13 @@ dotenv.config();
 
 //Set defaults incase not defined
 let folder = config.folder ? config.folder : `results-${new Date().toISOString().slice(0, 16)}`;
+let mainFolder = config.sync ? `sync-${folder}` : folder;
 let devices = config.devices ? config.devices : ['desktop'];
-config.folder = folder;
+config.folder = mainFolder;
 config.devices = devices;
 
-if (!fs.existsSync(folder)) {
-  fs.mkdirSync(folder);
+if (!fs.existsSync(mainFolder)) {
+  fs.mkdirSync(mainFolder);
 }
 
 console.log(
