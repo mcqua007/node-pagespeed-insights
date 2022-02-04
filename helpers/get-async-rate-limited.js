@@ -63,13 +63,14 @@ function buildData(config) {
 
 async function getAndWriteResultsAsyncRateLimited(config) {
   const requestsData = buildData(config);
-  const spinner = new Spinner(`%s Fetching results for ${requestsData.length * config.devices.length} urls(s)...`);
+  var spinner = new Spinner(`%s Fetching results for ${requestsData.length * config.devices.length} urls(s)...`);
   spinner.setSpinnerString(30);
   spinner.start();
 
   rateLimitMap(requestsData, 100, 20, getAndJoinData).then(
     (results) => {
-      writeResultsToFiles(results, spinner);
+      writeResultsToFiles(results);
+      spinner.stop(true);
       return results;
     },
     (err) => {
@@ -85,7 +86,10 @@ function createDirectory(path) {
   }
 }
 
-function writeResultsToFiles(results, spinner) {
+function writeResultsToFiles(results) {
+  var spinner = new Spinner(`%s Writing to files...`);
+  spinner.setSpinnerString(30);
+  spinner.start();
   results.forEach((item) => {
     var { data, folder, indexStr, fullPath, fileName, host, run } = item;
     fs.promises.writeFile(fullPath, JSON.stringify(data)).then((e) => {
